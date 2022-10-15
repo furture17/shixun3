@@ -1,39 +1,44 @@
 package sx5.alg;
 
 import com.csvreader.CsvReader;
-import lombok.val;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class LogisticRegression {
+public class LogisticRegression{
 
     //270行数据会造成y特别大，从而e之后是无穷
     //解决方案：标准化
-
     //优化，加正则项
-
     public static Map<ArrayList<Double>, Integer> mapBeforeProcess = new LinkedHashMap<>();
     public static Map<ArrayList<Double>, Integer> map = new LinkedHashMap<>();
-
-//    public static ArrayList<Double> featureList = new ArrayList<>();
     public static ArrayList<Double> params = new ArrayList<>();
     public static ArrayList<Double> predis = new ArrayList<>();
-//    public static double lr = 0.0001;//0.7939086294416243
-    public static double lr = 0.001;//
+//    public static String trainDataSetPath = "D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\JDT.csv";
+    public static String trainDataSetPath = "";
+    public static String testDataSetPath = "";
+    public static double lr = 0.01;
+    public static double lambda = 10;//正则化系数
     public static int epochNum = 10000;
     public static Double costPre = Double.MAX_VALUE;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void makePredict(String trainPath, String testPath) throws IOException {
+
+        trainDataSetPath = trainPath;
+        testDataSetPath = testPath;
+
         //TODO：62可以不写死
         for (int i = 0; i < 62; i++) {//第一个即为b
             params.add(0.0);
         }
 
         //1. 读文件，特征存储到ArrayList中，类别存储为0/1,整体为Map，最后只有985条数据
-        readFile();
+        readFile(trainDataSetPath);
         dataProcess();
 
         for(int i = 0; i < map.size(); i++) {
@@ -43,6 +48,8 @@ public class LogisticRegression {
 //        System.out.println(map.size());
 
         for (int epoch = 0; epoch < epochNum; epoch++) {
+            System.out.println("当前为第" + epoch + "轮");
+
             //2. 构建模型函数，得到预测值
             Iterator<ArrayList<Double>> iterator = map.keySet().iterator();
             for (int i = 0; i < map.size(); i++) {
@@ -82,12 +89,11 @@ public class LogisticRegression {
 //            System.out.println("w为：");
 //            System.out.println(params);
         }
-
-//        predict();
+        predict();
     }
 
-    private static void readFile() throws IOException {
-        CsvReader csvReader = new CsvReader("D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\PDE.csv", ',', StandardCharsets.UTF_8);
+    private static void readFile(String path) throws IOException {
+        CsvReader csvReader = new CsvReader(path, ',', StandardCharsets.UTF_8);
         csvReader.readHeaders();    //过滤表头
 
         while (csvReader.readRecord()) {
@@ -99,7 +105,6 @@ public class LogisticRegression {
             }
 
             if (csvReader.get(61).equals("clean")) {
-//                System.out.println(csvReader.get(61));
                 type = 1;
             }
             mapBeforeProcess.put(featureList,type);
@@ -184,7 +189,15 @@ public class LogisticRegression {
             i++;
         }
         cost /= predis.size();
-        return cost;
+
+        double costExtra = 0.0;
+        // 正则化
+        for (i = 1; i < params.size(); i++) {
+            costExtra += Math.pow(params.get(i), 2);
+        }
+        costExtra *= lambda;
+
+        return cost + costExtra;
     }
 
     private static void gradDesc() {
@@ -220,11 +233,19 @@ public class LogisticRegression {
 
         //更新w
         for (int i = 1; i < varAmount; i++) {
-            params.set(i, params.get(i) - lr * (med.get(i - 1)) / amount);
+            params.set(i, params.get(i) - lr * ((med.get(i - 1)) / amount + 2 * lambda * params.get(i)));
         }
     }
 
-    private static void predict() {
+    private static void predict() throws IOException {
+        mapBeforeProcess.clear();
+        map.clear();
+        predis.clear();
+
+        readFile(testDataSetPath);
+        dataProcess();
+
+
         int amount = map.size();
         Iterator<ArrayList<Double>> iterator = map.keySet().iterator();
         Iterator<Integer> labelsIt = map.values().iterator();
@@ -242,11 +263,9 @@ public class LogisticRegression {
             }
             int trueLabel = labelsIt.next();
             if (Math.abs(trueLabel - labelPre) < 0.5) accurateNum++;
-            System.out.println("labelPre: " + labelPre);
+            if(labelPre < 0.5)
+                System.out.println("labelPre: " + labelPre);
         }
         System.out.println("accuracy:" + (accurateNum + 0.0) / amount);
-
-        System.out.println("------------");
-        System.out.println(params);
     }
 }

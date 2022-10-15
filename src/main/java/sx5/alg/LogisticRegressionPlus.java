@@ -13,22 +13,17 @@ public class LogisticRegressionPlus {
 
     //270行数据会造成y特别大，从而e之后是无穷
     //解决方案：标准化
-
     //优化，加正则项
-
     public static Map<ArrayList<Double>, Integer> mapBeforeProcess = new LinkedHashMap<>();
     public static Map<ArrayList<Double>, Integer> map = new LinkedHashMap<>();
-
-//    public static ArrayList<Double> featureList = new ArrayList<>();
     public static ArrayList<Double> params = new ArrayList<>();
     public static ArrayList<Double> predis = new ArrayList<>();
-//    public static double lr = 0.0001;//0.7939086294416243
-    public static String trainDataSetPath = "D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\JDT.csv";
-    public static String testDataSetPath = "D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\PDE.csv";
-
-    public static double lr = 0.01;//
-    public static double lambda = 0.01;//正则化系数
-    public static int epochNum = 20000;
+//    public static String trainDataSetPath = "D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\JDT.csv";
+    public static String trainDataSetPath = "D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\PDE.csv";
+    public static String testDataSetPath = "D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\JDT.csv";
+    public static double lr = 0.01;
+    public static double lambda = 10;//正则化系数
+    public static int epochNum = 10000;
     public static Double costPre = Double.MAX_VALUE;
 
 
@@ -49,6 +44,8 @@ public class LogisticRegressionPlus {
 //        System.out.println(map.size());
 
         for (int epoch = 0; epoch < epochNum; epoch++) {
+            System.out.println("当前为第" + epoch + "轮");
+
             //2. 构建模型函数，得到预测值
             Iterator<ArrayList<Double>> iterator = map.keySet().iterator();
             for (int i = 0; i < map.size(); i++) {
@@ -88,8 +85,7 @@ public class LogisticRegressionPlus {
 //            System.out.println("w为：");
 //            System.out.println(params);
         }
-
-//        predict();
+        predict();
     }
 
     private static void readFile(String path) throws IOException {
@@ -105,7 +101,6 @@ public class LogisticRegressionPlus {
             }
 
             if (csvReader.get(61).equals("clean")) {
-//                System.out.println(csvReader.get(61));
                 type = 1;
             }
             mapBeforeProcess.put(featureList,type);

@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ba2281c-10ec-451c-8c8d-34b852a6c962" name="Changes" comment="demo01">
-      <change beforePath="$PROJECT_DIR$/../../pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/main/java/sx5/controller/DemoController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/main/java/sx5/service/DemoService.java" beforeDir="false" />
-    </list>
+    <list default="true" id="0ba2281c-10ec-451c-8c8d-34b852a6c962" name="Changes" comment="demo01" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,20 +28,20 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/VI/University/大三/大三上/实训/BugDetectionSystem/shixun3",
-    "spring.configuration.checksum": "2ef1323c08ddc2382d250091a0d76917"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/VI/University/大三/大三上/实训/BugDetectionSystem/shixun3&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;2ef1323c08ddc2382d250091a0d76917&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\VI\University\大三\大三上\实训\BugDetectionSystem\shixun3\back\BackEnd\src\main\resources" />
@@ -91,6 +87,7 @@
       <updated>1664072711823</updated>
       <workItem from="1664072713422" duration="2019000" />
       <workItem from="1665646712533" duration="18000" />
+      <workItem from="1665710942196" duration="6000" />
     </task>
     <task id="LOCAL-00001" summary="demo01">
       <created>1664073208589</created>
