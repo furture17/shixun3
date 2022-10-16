@@ -36,7 +36,7 @@ public class FileController {
         for(MultipartFile file:files){
             System.out.println("正在存储"+file.getOriginalFilename()+"文件");
             String savePath =  new ApplicationHome(this.getClass()).getDir().getParentFile()
-                    .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data";;
+                    .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data";
 
             name=file.getOriginalFilename();
             File folder=new File(savePath);

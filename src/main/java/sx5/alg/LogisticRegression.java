@@ -4,10 +4,7 @@ import com.csvreader.CsvReader;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LogisticRegression{
 
@@ -18,7 +15,8 @@ public class LogisticRegression{
     public static Map<ArrayList<Double>, Integer> map = new LinkedHashMap<>();
     public static ArrayList<Double> params = new ArrayList<>();
     public static ArrayList<Double> predis = new ArrayList<>();
-//    public static String trainDataSetPath = "D:\\VI\\University\\大三\\大三上\\实训\\软件缺陷数据集及相关说明材料\\AEEEM\\csv\\JDT.csv";
+//    public static String trainDataSetPaths[];
+//    public static String testDataSetPaths[];
     public static String trainDataSetPath = "";
     public static String testDataSetPath = "";
     public static double lr = 0.01;
@@ -27,7 +25,20 @@ public class LogisticRegression{
     public static Double costPre = Double.MAX_VALUE;
 
 
-    public static void makePredict(String trainPath, String testPath) throws IOException {
+    public static ArrayList<ArrayList<Double>> makePredict(String trainPath, String testPath) throws IOException {
+//    public static List<Map<String, Double>> makePredict(String[] trainPaths, String[] testPaths) throws IOException {
+        mapBeforeProcess.clear();
+        map.clear();
+        params.clear();
+        predis.clear();
+        costPre = Double.MAX_VALUE;
+
+
+        ArrayList<ArrayList<Double>> resultList = new ArrayList<>();
+//        ArrayList<Map<String, Double>> resultList = new ArrayList();
+
+//        trainDataSetPaths = trainPaths;
+//        testDataSetPaths = testPaths;
 
         trainDataSetPath = trainPath;
         testDataSetPath = testPath;
@@ -39,6 +50,7 @@ public class LogisticRegression{
 
         //1. 读文件，特征存储到ArrayList中，类别存储为0/1,整体为Map，最后只有985条数据
         readFile(trainDataSetPath);
+//        readFile(trainDataSetPaths);
         dataProcess();
 
         for(int i = 0; i < map.size(); i++) {
@@ -73,12 +85,23 @@ public class LogisticRegression{
 
             //3. 代价函数
             double cost = costFunction();
+//            Map<String, Double> mapElement= new LinkedHashMap<>();
+            ArrayList<Double> arrayList = new ArrayList<>();
+            if (epoch % 20 == 0) {
+//                mapElement.put("x", (double) epoch);
+//                mapElement.put("y", cost);
+//                resultList.add(mapElement);
+                arrayList.add((double) epoch);
+                arrayList.add(cost);
+                resultList.add(arrayList);
+            }
             System.out.println("==============");
             System.out.println("本轮损失为：");
             System.out.println(cost);
-            if (cost > costPre) {
+//            if (cost > costPre) {
+            if (costPre - cost < 0.000001) {
                 predict();
-                return;
+                return resultList;
             }
             costPre = cost;
 
@@ -90,9 +113,11 @@ public class LogisticRegression{
 //            System.out.println(params);
         }
         predict();
+        return resultList;
     }
 
     private static void readFile(String path) throws IOException {
+//    private static void readFile(String[] paths) throws IOException {
         CsvReader csvReader = new CsvReader(path, ',', StandardCharsets.UTF_8);
         csvReader.readHeaders();    //过滤表头
 
@@ -111,6 +136,29 @@ public class LogisticRegression{
         }
         csvReader.close();
     }
+
+//    private static void readFile(String[] paths) throws IOException {
+//        for (int j = 0; j < paths.length; j++) {
+//            String path = paths[j];
+//            CsvReader csvReader = new CsvReader(path, ',', StandardCharsets.UTF_8);
+//            csvReader.readHeaders();    //过滤表头
+//
+//            while (csvReader.readRecord()) {
+//                ArrayList<Double> featureList = new ArrayList<>();
+//                int type = 0;
+//                for (int i = 0; i < 61; i ++) {
+//                    featureList.add(Double.parseDouble(csvReader.get(i)));
+////                System.out.print(csvReader.get(i) + " ");
+//                }
+//
+//                if (csvReader.get(61).equals("clean")) {
+//                    type = 1;
+//                }
+//                mapBeforeProcess.put(featureList,type);
+//            }
+//            csvReader.close();
+//        }
+//    }
 
     private static void dataProcess() {
         int featureAmount = params.size() - 1; //不包含b/w0/x0
@@ -238,11 +286,12 @@ public class LogisticRegression{
     }
 
     private static void predict() throws IOException {
-        mapBeforeProcess.clear();
-        map.clear();
-        predis.clear();
+//        mapBeforeProcess.clear();
+//        map.clear();
+//        predis.clear();
 
         readFile(testDataSetPath);
+//        readFile(testDataSetPaths);
         dataProcess();
 
 
