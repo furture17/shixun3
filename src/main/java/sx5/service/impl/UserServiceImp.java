@@ -12,6 +12,7 @@ import sx5.service.UserService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 @Service
 @Slf4j
@@ -65,6 +66,31 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User>
             return null;
         }
         return user; //TODO:脱敏处理，部分信息不能传输
+    }
+
+    @Override
+    public void upRole(String userAccount) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        User user = userMapper.selectOne(queryWrapper);
+        user.setUserRole(1);
+        userMapper.updateById(user);//TODO:不行的话就另一种update
+    }
+
+    @Override
+    public ArrayList<User> getUsers(String userAccount) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        User user = userMapper.selectOne(queryWrapper);
+
+        //TODO: 管理员权限有问题
+        if (user.getUserRole() == 1) {
+            return (ArrayList<User>) userMapper.selectList(null);
+        }
+        ArrayList<User> arrayList = new ArrayList<>();
+        arrayList.add(user);
+        return arrayList;
+//        return (ArrayList<User>) userMapper.selectList(queryWrapper);
     }
 
 }

@@ -1,7 +1,11 @@
 package sx5.alg;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.csvreader.CsvReader;
+import sx5.mapper.ModelMapper;
+import sx5.model.domain.Model;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -11,12 +15,11 @@ public class LogisticRegression{
     //270行数据会造成y特别大，从而e之后是无穷
     //解决方案：标准化
     //优化，加正则项
+    ArrayList<ArrayList<Double>> resultList = new ArrayList<>();
     public static Map<ArrayList<Double>, Integer> mapBeforeProcess = new LinkedHashMap<>();
     public static Map<ArrayList<Double>, Integer> map = new LinkedHashMap<>();
     public static ArrayList<Double> params = new ArrayList<>();
     public static ArrayList<Double> predis = new ArrayList<>();
-//    public static String trainDataSetPaths[];
-//    public static String testDataSetPaths[];
     public static String trainDataSetPath = "";
     public static String testDataSetPath = "";
     public static double lr = 0.01;
@@ -24,24 +27,21 @@ public class LogisticRegression{
     public static int epochNum = 10000;
     public static Double costPre = Double.MAX_VALUE;
 
-
-    public static ArrayList<ArrayList<Double>> makePredict(String trainPath, String testPath) throws IOException {
+    public  ArrayList<ArrayList<Double>> makePredict(Long idp, String trainPath, String testPath, Double lrp, Double lambdap, int epochNump) throws IOException {
+//    public static ArrayList<ArrayList<Double>> makePredict(String trainPath, String testPath) throws IOException {
 //    public static List<Map<String, Double>> makePredict(String[] trainPaths, String[] testPaths) throws IOException {
         mapBeforeProcess.clear();
         map.clear();
+        resultList.clear();
         params.clear();
         predis.clear();
         costPre = Double.MAX_VALUE;
 
-
-        ArrayList<ArrayList<Double>> resultList = new ArrayList<>();
-//        ArrayList<Map<String, Double>> resultList = new ArrayList();
-
-//        trainDataSetPaths = trainPaths;
-//        testDataSetPaths = testPaths;
-
         trainDataSetPath = trainPath;
         testDataSetPath = testPath;
+        lr = lrp;
+        lambda = lambdap;
+        epochNum = epochNump;
 
         //TODO：62可以不写死
         for (int i = 0; i < 62; i++) {//第一个即为b
@@ -116,7 +116,7 @@ public class LogisticRegression{
         return resultList;
     }
 
-    private static void readFile(String path) throws IOException {
+    private  void readFile(String path) throws IOException {
 //    private static void readFile(String[] paths) throws IOException {
         CsvReader csvReader = new CsvReader(path, ',', StandardCharsets.UTF_8);
         csvReader.readHeaders();    //过滤表头
@@ -160,7 +160,7 @@ public class LogisticRegression{
 //        }
 //    }
 
-    private static void dataProcess() {
+    private  void dataProcess() {
         int featureAmount = params.size() - 1; //不包含b/w0/x0
         ArrayList<Double> feaAvg = new ArrayList<>(featureAmount); // 平均值
         ArrayList<Double> varList = new ArrayList<>(featureAmount);
@@ -211,7 +211,7 @@ public class LogisticRegression{
         }
     }
 
-    private static double model(ArrayList<Double> featureList) {
+    private  double model(ArrayList<Double> featureList) {
         double y = 0.0;
         y += params.get(0);
         for (int i = 1; i <= featureList.size(); i++) {
@@ -224,7 +224,7 @@ public class LogisticRegression{
         return y;
     }
 
-    private static double costFunction() {
+    private  double costFunction() {
          double cost = 0.0;
         int i = 0;
         for (Integer label : map.values()) {
@@ -248,7 +248,7 @@ public class LogisticRegression{
         return cost + costExtra;
     }
 
-    private static void gradDesc() {
+    private  void gradDesc() {
         int amount = predis.size();
         int varAmount = params.size();
 
@@ -285,7 +285,7 @@ public class LogisticRegression{
         }
     }
 
-    private static void predict() throws IOException {
+    private  void predict() throws IOException {
 //        mapBeforeProcess.clear();
 //        map.clear();
 //        predis.clear();
@@ -315,6 +315,11 @@ public class LogisticRegression{
             if(labelPre < 0.5)
                 System.out.println("labelPre: " + labelPre);
         }
-        System.out.println("accuracy:" + (accurateNum + 0.0) / amount);
+        Double acc = (accurateNum + 0.0) / amount;
+        System.out.println("accuracy:" + acc);
+
+        ArrayList<Double> arrayList = new ArrayList<>();
+        arrayList.add(acc);
+        resultList.add(arrayList);
     }
 }

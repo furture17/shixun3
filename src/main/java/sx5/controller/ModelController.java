@@ -2,14 +2,11 @@ package sx5.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import sx5.common.BaseResponse;
 import sx5.common.ResultUtils;
 import sx5.model.domain.Model;
 import sx5.service.ModelService;
-
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -28,9 +25,10 @@ public class ModelController {
     }
 
     @PostMapping("/saveModel")
-    public String saveModel() {
-        modelService.saveModel();
-        return "aa";
+    public BaseResponse<Integer> saveModel(@RequestBody Model model) {
+        System.out.println(model);
+        int result = modelService.saveModel(model);
+        return ResultUtils.success(result);
     }
 
 }

@@ -5,7 +5,7 @@ import sx5.model.domain.Model;
 import java.util.List;
 
 public interface ModelService {
-    void saveModel();
+    int saveModel(Model model);
 
     List<Model> getModels(String userAccount);
 }

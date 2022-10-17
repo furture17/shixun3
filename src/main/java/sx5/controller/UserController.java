@@ -12,6 +12,7 @@ import sx5.service.UserService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 @RestController
 @CrossOrigin
@@ -58,5 +59,18 @@ public class UserController {
         if (user == null)
             return ResultUtils.error(ErrorCode.PARAMS_ERROR,"用户名与密码不匹配","");
         return ResultUtils.success(user);
+    }
+
+    @GetMapping("getUsers")
+    public BaseResponse<ArrayList<User>> getUsers(@RequestParam String userAccount) {
+        System.out.println(userAccount);
+        ArrayList<User> users = userService.getUsers(userAccount);
+        return ResultUtils.success(users);
+    }
+
+    @GetMapping("upRole")
+    public BaseResponse<String> upRole(@RequestParam String userAccount) {
+        userService.upRole(userAccount);
+        return ResultUtils.success("success");
     }
 }

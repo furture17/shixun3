@@ -19,15 +19,18 @@ public class AlgController {
     private AlgService algService;
 
     @PostMapping("/logPredict")
-//    public List<Map<String, Double>> logPredict(@RequestBody AlgRequest algRequest) {
     public ArrayList<ArrayList<Double>> logPredict(@RequestBody AlgRequest algRequest) {
         String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
                 .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data\\";
 
+        Long id = algRequest.getId();
         String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath()).concat(".csv");
         String testDataSetPath = Path.concat(algRequest.getTestDataSetPath()).concat(".csv");
+        Double lr = algRequest.getLr();
+        Integer epochNum = algRequest.getEpochNum();
+        Double lambda = algRequest.getLambda();
 
-        return algService.logPredict(trainDataSetPath, testDataSetPath);
+        return algService.logPredict(id, trainDataSetPath, testDataSetPath, lr, lambda, epochNum);
     }
 
 //    @PostMapping("/svmPredict")
@@ -42,22 +45,21 @@ public class AlgController {
 //    }
 
     @PostMapping("/svmPredict")
-    public Map<String, ArrayList<ArrayList<Double>>> svmPredict(@RequestBody AlgRequest algRequest) {
+    public Map<String, ArrayList<ArrayList<Double>>> KNNPredict(@RequestBody AlgRequest algRequest) {
         String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
                 .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data\\";
 
-//        String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath());
-//        String testDataSetPath = Path.concat(algRequest.getTestDataSetPath());
-
+        if (algRequest.getTrainDataSetPath() == null) return null;
 
         String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath()).concat(".csv");
         String testDataSetPath = Path.concat(algRequest.getTestDataSetPath()).concat(".csv");
-
-//
+        Integer electNum = algRequest.getElectNum();
+        Integer neighbor = algRequest.getNeighbor();
+        Long id = algRequest.getId();
 //        String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath());
 //        String testDataSetPath = Path.concat(algRequest.getTestDataSetPath());
 
-        return algService.svmPredict(trainDataSetPath, testDataSetPath);
+        return algService.KNNPredict(id, trainDataSetPath, testDataSetPath, electNum, neighbor);
     }
 
 //    @PostMapping("/predict")

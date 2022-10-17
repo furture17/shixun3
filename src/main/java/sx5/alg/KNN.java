@@ -6,10 +6,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class SVM2 {
+public class KNN {
 
     public static String trainDataSetPath = "";
     public static String testDataSetPath = "";
+
+    public static int elect_num;
+    public static int neighbor;
 
     static double[][] dis = new double[5000][5000];
     static int[] id = new int[5000];
@@ -38,7 +41,7 @@ public class SVM2 {
     }
 
 //    public static void main(String[] args) { // System.out.println(a);
-    public static Map<String, ArrayList<ArrayList<Double>>> makePredict(String trainPath, String testPath) { // System.out.println(a);
+    public static Map<String, ArrayList<ArrayList<Double>>> makePredict(String trainPath, String testPath, int electNum, int neighbour) { // System.out.println(a);
 
         LinkedHashMap<String, ArrayList<ArrayList<Double>>> resultMap = new LinkedHashMap<>();
         ArrayList<ArrayList<Double>> arrayList1 = new ArrayList<>();
@@ -50,11 +53,11 @@ public class SVM2 {
         // standard optimizer
 
         boolean standard0 = true; // remove 0 standard
-        boolean standard1 = false; // max-min standard
-        boolean standard2 = true; // mean-std standard
+        boolean standard1 = true; // max-min standard
+        boolean standard2 = false; // mean-std standard
         boolean standard3 = false; // sigmoid standard
-        int elect_num = 20; //elect std_max
-        int neighbor = 5; //select neighbor
+        elect_num = electNum; //elect std_max
+        neighbor = neighbour; //select neighbor
 
         // readIn part
 
@@ -337,7 +340,7 @@ public class SVM2 {
                 }
 
                 for(int i = 1; i <= test_sample_num; ++i) {
-                    for(int j = i + 1; j <= test_sample_num; ++j) {
+                    for(int j = 1; j <= test_sample_num; ++j) {
                         for(int p = 1; p <= elect_num; ++p) {
                             dis[i][j] += (test_feature[i][std_max_feature[p]] - test_feature[j][std_max_feature[p]])
                                     * (test_feature[i][std_max_feature[p]] - test_feature[j][std_max_feature[p]]);
@@ -349,7 +352,7 @@ public class SVM2 {
                     }
                     qsort(i, 1, test_sample_num);
                     for(int k = 1; k <= neighbor; ++k) {
-                        nb[i][k] = id[test_sample_num - k + 1];
+                        nb[i][k] = id[k + 1];
                     }
                 }
 
@@ -364,28 +367,29 @@ public class SVM2 {
                         }
                         x = 0;
                         y = 0;
-                        point[i][0] += x * alpha;
-                        point[i][1] += y * alpha;
+                        point[i][0] += (x - point[i][0]) * alpha;
+                        point[i][1] += (y - point[i][1]) * alpha;
                         for(int k = 1; k <= neighbor; ++k) {
                             int random = (int) (test_sample_num * Math.random());
                             x += point[random][0];
                             y += point[random][1];
                         }
-                        point[i][0] -= x * alpha;
-                        point[i][1] -= y * alpha;
+                        point[i][0] -= (x - point[i][0]) * alpha;
+                        point[i][1] -= (y - point[i][1]) * alpha;
                     }
                 }
 
-                ArrayList<Map<String, Double>> resultList = new ArrayList<>();
-                for(int i = 1; i <= test_sample_num; ++i) {
-                    Map<String, Double> mapElement= new LinkedHashMap<>();
-                    mapElement.put("x", point[i][0]);
-                    mapElement.put("y", point[i][0]);
-                    mapElement.put("l", (double) true_label[i]);
-                    resultList.add(mapElement);
-                }
+//                ArrayList<Map<String, Double>> resultList = new ArrayList<>();
+//                for(int i = 1; i <= test_sample_num; ++i) {
+//                    Map<String, Double> mapElement= new LinkedHashMap<>();
+//                    mapElement.put("x", point[i][0]);
+//                    mapElement.put("y", point[i][0]);
+//                    mapElement.put("l", (double) true_label[i]);
+//                    resultList.add(mapElement);
+//                }
 
                 for(int i = 1; i <= test_sample_num; ++i) {
+//                for(int i = 1; i <= 100; ++i) {
                     ArrayList<Double> arrayList = new ArrayList<>();
                     if (true_label[i] == 1) {
                         arrayList.add(point[i][0]);
@@ -399,8 +403,17 @@ public class SVM2 {
                 }
             }
         }
+
+
         resultMap.put("data1", arrayList1);
         resultMap.put("data2", arrayList2);
+
+        ArrayList<Double> arrayList = new ArrayList<>();
+        arrayList.add(accuracy);
+        ArrayList<ArrayList<Double>> listArrayList = new ArrayList<>();
+        listArrayList.add(arrayList);
+        resultMap.put("bxy", listArrayList);
+
         return resultMap;
     }
 }

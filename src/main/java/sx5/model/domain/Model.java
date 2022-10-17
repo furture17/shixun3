@@ -38,4 +38,34 @@ public class Model implements Serializable {
      * 模型准确率
      */
     private Double accuracy;
+
+    /**
+     * 学习率
+     */
+    private Double lr;
+
+    /**
+     * 正则化系数
+     */
+    private Double lambda;
+
+    /**
+     * 训练轮数
+     */
+    private Integer epoch;
+
+    /**
+     * 模型名称
+     */
+    private String name;
+
+    /**
+     * electNum
+     */
+    private Integer electNum;
+
+    /**
+     * 邻居
+     */
+    private Integer neighbor;
 }
