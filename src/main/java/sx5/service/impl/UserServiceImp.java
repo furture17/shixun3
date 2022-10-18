@@ -74,7 +74,7 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User>
         queryWrapper.eq("userAccount", userAccount);
         User user = userMapper.selectOne(queryWrapper);
         user.setUserRole(1);
-        userMapper.updateById(user);//TODO:不行的话就另一种update
+        userMapper.updateById(user);
     }
 
     @Override
@@ -87,6 +87,9 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User>
         if (user.getUserRole() == 1) {
             return (ArrayList<User>) userMapper.selectList(null);
         }
+
+        System.out.println("-----------");
+        System.out.println(user);
         ArrayList<User> arrayList = new ArrayList<>();
         arrayList.add(user);
         return arrayList;

@@ -33,17 +33,6 @@ public class AlgController {
         return algService.logPredict(id, trainDataSetPath, testDataSetPath, lr, lambda, epochNum);
     }
 
-//    @PostMapping("/svmPredict")
-//    public List<Map<String, Double>> svmPredict(@RequestBody AlgRequest algRequest) {
-//        String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
-//                .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data\\";
-//
-//        String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath());
-//        String testDataSetPath = Path.concat(algRequest.getTestDataSetPath());
-//
-//        return algService.svmPredict(trainDataSetPath, testDataSetPath);
-//    }
-
     @PostMapping("/svmPredict")
     public Map<String, ArrayList<ArrayList<Double>>> KNNPredict(@RequestBody AlgRequest algRequest) {
         String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
@@ -56,37 +45,33 @@ public class AlgController {
         Integer electNum = algRequest.getElectNum();
         Integer neighbor = algRequest.getNeighbor();
         Long id = algRequest.getId();
-//        String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath());
-//        String testDataSetPath = Path.concat(algRequest.getTestDataSetPath());
-
         return algService.KNNPredict(id, trainDataSetPath, testDataSetPath, electNum, neighbor);
     }
 
-//    @PostMapping("/predict")
-//    public Map<String, ArrayList<ArrayList<Double>>> svmPredict(@RequestBody AlgRequest algRequest) {
-//        String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
-//                .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data\\";
-//
-//        String trainPath = algRequest.getTrainDataSetPath();
-//        String testPath = algRequest.getTestDataSetPath();
-//        String[] trainDataSetPath = trainPath.split(trainPath);
-//        String[] testDataSetPath= trainPath.split(testPath);
-//
-//        System.out.println(trainDataSetPath);
-//        System.out.println(testDataSetPath);
-//
-//        for (String s : trainDataSetPath) {
-//            s = Path.concat(s);
-//        }
-//        for (String s : testDataSetPath) {
-//            s = Path.concat(s);
-//        }
-//
-////
-////        String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath());
-////        String testDataSetPath = Path.concat(algRequest.getTestDataSetPath());
-//
-//        return algService.svmPredict(trainDataSetPath, testDataSetPath);
-//    }
+    @PostMapping("/bysPredict")
+    public Map<String, ArrayList<ArrayList<Double>>> BYSPredict(@RequestBody AlgRequest algRequest) {
+        String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
+                .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data\\";
+
+        if (algRequest.getTrainDataSetPath() == null) return null;
+
+        String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath()).concat(".csv");
+        String testDataSetPath = Path.concat(algRequest.getTestDataSetPath()).concat(".csv");
+        Long id = algRequest.getId();
+        return algService.BYSPredict(id, trainDataSetPath, testDataSetPath);
+    }
+
+    @PostMapping("/dtPredict")
+    public Map<String, ArrayList<ArrayList<Double>>> DTPredict(@RequestBody AlgRequest algRequest) {
+        String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
+                .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data\\";
+
+        if (algRequest.getTrainDataSetPath() == null) return null;
+
+        String trainDataSetPath = Path.concat(algRequest.getTrainDataSetPath()).concat(".csv");
+        String testDataSetPath = Path.concat(algRequest.getTestDataSetPath()).concat(".csv");
+        Long id = algRequest.getId();
+        return algService.DTPredict(id, trainDataSetPath, testDataSetPath);
+    }
 
 }
