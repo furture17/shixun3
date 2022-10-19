@@ -33,7 +33,7 @@ public class AlgController {
         return algService.logPredict(id, trainDataSetPath, testDataSetPath, lr, lambda, epochNum);
     }
 
-    @PostMapping("/svmPredict")
+    @PostMapping("/knnPredict")
     public Map<String, ArrayList<ArrayList<Double>>> KNNPredict(@RequestBody AlgRequest algRequest) {
         String Path =  new ApplicationHome(this.getClass()).getDir().getParentFile()
                 .getParentFile().getAbsolutePath() + "\\src\\main\\resources\\data\\";

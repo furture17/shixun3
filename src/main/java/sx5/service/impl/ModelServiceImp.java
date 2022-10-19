@@ -31,12 +31,12 @@ public class ModelServiceImp implements ModelService {
     @Override
     public List<Model> getModels(String userAccount) {
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userAccount", userAccount);
-
         QueryWrapper<User> queryWrapper1 = new QueryWrapper<>();
 
-        User user = userMapper.selectOne(queryWrapper1);
+        queryWrapper.eq("userAccount", userAccount);
+        queryWrapper1.eq("userAccount", userAccount);
 
+        User user = userMapper.selectOne(queryWrapper1);
         if (user.getUserRole() == 1) {
             return modelMapper.selectList(null);
         }
